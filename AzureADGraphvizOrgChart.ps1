@@ -34,6 +34,7 @@ foreach ($user in $users) {
         $sb.AppendLine( $user.DisplayName.replace(" ","_")+ " -> "+ $manager.DisplayName.replace(" ","_"))
      }
 }    
+#setup termination for the .dot graphviz file
 $sb.AppendLine("}")
 
 #Cleanup  no space no . no '
@@ -43,4 +44,3 @@ $sb = $sb.Replace("'","")
 $sb.ToString() | Out-File $path\orgchart.dot
 
 #will add code to run graphviz dot.exe natively here
-#test test test test 
