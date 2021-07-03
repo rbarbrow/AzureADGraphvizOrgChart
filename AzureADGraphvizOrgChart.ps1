@@ -4,14 +4,17 @@ $path = "C:\Users\rbarbrow\OneDrive - Markon Solutions\Desktop"
 $dotfile ="\orgchart.dot"
 $orgfile = "\orgchart.svg"
 
-
 $DOTpath =$path+$dotfile
 $ORGpath =$path+$orgfile
 
+
 #array of names to ignore
-$ignore = @("Blue Desk", "Bot", "Canary Bot", "Help", "Help Con", "Help Fin", "Help HR", "Help IT", "Help Marketing", "Help Office Admin", "Help Rec", "Help Sec", "Help Solutions", "HelpProp", "HQ Innovation Lab", "HQ Training Room", "HQ Well Room", "innovationlab", "Peerless Admin", "Red Desk", "Yellow Desk")
+$ignore = @("Blue Desk", "Bot", "Canary Bot", "Help", "Help Con", "Help Fin", "Help HR", "Help IT", "Help Marketing", "Help Office Admin", "Help Rec", "Help Sec", "Help Solutions", "HelpProp", "HQ Innovation Lab", "HQ Training Room", "HQ Well Room", "innovation.lab", "Peerless Admin", "Red Desk", "Yellow Desk")
+
+#$ignoreOrphans = $FALSE
+$ignoreOrphans = $TRUE
 #path for graphviz dot.exe file
-$graphvizPath = "C:\Program Files\Graphviz\bin\dot.exe"
+#$graphvizPath = "C:\Program Files\Graphviz\bin\dot.exe"
 
 
 
@@ -42,7 +45,9 @@ foreach ($user in $users) {
         #checks if the manager is null also replaces any spaces in the name
         if($null -eq $manager.DisplayName) 
         {
-            $sb.AppendLine(  "None -> " + $user.DisplayName.replace(" ","_") )
+            if(!$ignoreOrphans){
+                $sb.AppendLine(  "None -> " + $user.DisplayName.replace(" ","_") )
+            }
         }else {
             $sb.AppendLine( $manager.DisplayName.replace(" ","_")+ " -> "+ $user.DisplayName.replace(" ","_") )
         }
