@@ -14,33 +14,22 @@ $ignore = @("Blue Desk", "Bot", "Canary Bot", "Help", "Help Con", "Help Fin", "H
 $ignoreOrphans = $FALSE
 #$ignoreOrphans = $TRUE
 #path for graphviz dot.exe file
-roy g biv
+#roy g biv
 $includeTitle = $true
 $TitleColor = @{}
-$TitleColor.Add("President","darkviolet")
-
+$TitleColor.Add("President","darkviolet") 
 $TitleColor.Add("Vice President","indigo")
-
 $TitleColor.Add("Senior Director","Blue")
-$TitleColor.Add("Technical Director","Blue")
-
 $TitleColor.Add("Director","Green")
-$TitleColor.Add("Senior Specialist","Green")
-
+$TitleColor.Add("Technical Director","Green")
 $TitleColor.Add("Senior Manager","greenyellow")
-$TitleColor.Add("Specialist","greenyellow")
-
+$TitleColor.Add("Senior Specialist","Greenyellow")
 $TitleColor.Add("Manager","Yellow")
-
-
+$TitleColor.Add("Specialist","Yellow")
 $TitleColor.Add("Senior Associate","orange")
 $TitleColor.Add("Senior Consultant","Orange")
-
-
 $TitleColor.Add("Associate","Red")
 $TitleColor.Add("Lead Associate","Red")
-
-
 $TitleColor.Add("1099","Grey")
 $TitleColor.Add("Intern","Grey")
 
@@ -62,13 +51,13 @@ $sb = new-object System.Text.StringBuilder
 #setup the header of the .dot graphviz file
 $sb.AppendLine("digraph{")
 $sb.AppendLine("    layout = dot;")
-$sb.AppendLine("    ranksep=1.9;")
+$sb.AppendLine("    ranksep=10;")
 
 #loop through each user 
 
 if($includeTitle){
     foreach ($user in $users) {
-        $sb.AppendLine($user.DisplayName.replace(" ","_")+" [color="+$TitleColor[$user.JobTitle]+"]")
+        $sb.AppendLine($user.DisplayName.replace(" ","_")+" [color="+$TitleColor[$user.JobTitle]+", style=filled]")
     }
 }
 
