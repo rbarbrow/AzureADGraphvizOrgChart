@@ -11,9 +11,32 @@ $ORGpath =$path+$orgfile
 #array of names to ignore
 $ignore = @("Blue Desk", "Bot", "Canary Bot", "Help", "Help Con", "Help Fin", "Help HR", "Help IT", "Help Marketing", "Help Office Admin", "Help Rec", "Help Sec", "Help Solutions", "HelpProp", "HQ Innovation Lab", "HQ Training Room", "HQ Well Room", "innovation.lab", "Peerless Admin", "Red Desk", "Yellow Desk")
 
-#$ignoreOrphans = $FALSE
-$ignoreOrphans = $TRUE
+$ignoreOrphans = $FALSE
+#$ignoreOrphans = $TRUE
 #path for graphviz dot.exe file
+
+$includeTitle = $true
+$TitleColor = @{}
+$TitleColor.Add("President","Blue")
+$TitleColor.Add("1099","Blue")
+$TitleColor.Add("Associate","Blue")
+$TitleColor.Add("Director","Blue")
+$TitleColor.Add("Lead Associate","Blue")
+$TitleColor.Add("Manager","Blue")
+$TitleColor.Add("President","Blue")
+$TitleColor.Add("Security Officer","Blue")
+$TitleColor.Add("Senior Associate","Blue")
+$TitleColor.Add("Senior Consultant","Blue")
+$TitleColor.Add("Senior Director","Blue")
+$TitleColor.Add("Senior Manager","Blue")
+$TitleColor.Add("Senior Specialist","Blue")
+$TitleColor.Add("Specialist","Blue")
+$TitleColor.Add("Vice President","Blue")
+$TitleColor.Add("Intern","Blue")
+$TitleColor.Add("Technical Director","Blue")
+
+
+
 #$graphvizPath = "C:\Program Files\Graphviz\bin\dot.exe"
 
 
@@ -34,6 +57,16 @@ $sb.AppendLine("    layout = dot;")
 $sb.AppendLine("    ranksep=1.9;")
 
 #loop through each user 
+
+if($includeTitle){
+    foreach ($user in $users) {
+        $sb
+    }
+}
+
+
+
+
 foreach ($user in $users) {
    
     #checks to see if user is on the ignore list
