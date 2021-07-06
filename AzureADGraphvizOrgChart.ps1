@@ -13,8 +13,9 @@ $ignore = @("Blue Desk", "Bot", "Canary Bot", "Help", "Help Con", "Help Fin", "H
 
 $ignoreOrphans = $FALSE
 #$ignoreOrphans = $TRUE
-#path for graphviz dot.exe file
-#roy g biv
+
+
+#array of job title to color change as needed
 $includeTitle = $true
 $TitleColor = @{}
 $TitleColor.Add("President","darkviolet") 
@@ -54,16 +55,14 @@ $sb.AppendLine("    layout = dot;")
 $sb.AppendLine("    ranksep=10;")
 
 #loop through each user 
-
+#loop sets up def of each user and what colors should be assigined to their node
 if($includeTitle){
     foreach ($user in $users) {
         $sb.AppendLine($user.DisplayName.replace(" ","_")+" [color="+$TitleColor[$user.JobTitle]+", style=filled]")
     }
 }
 
-
-
-
+#loop sets up the hierarchy 
 foreach ($user in $users) {
    
     #checks to see if user is on the ignore list
