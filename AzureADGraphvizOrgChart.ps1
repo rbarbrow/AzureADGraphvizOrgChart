@@ -14,34 +14,42 @@ $ignore = @("Blue Desk", "Bot", "Canary Bot", "Help", "Help Con", "Help Fin", "H
 $ignoreOrphans = $FALSE
 #$ignoreOrphans = $TRUE
 #path for graphviz dot.exe file
-
+roy g biv
 $includeTitle = $true
 $TitleColor = @{}
-$TitleColor.Add("President","Blue")
-$TitleColor.Add("1099","Blue")
-$TitleColor.Add("Associate","Blue")
-$TitleColor.Add("Director","Blue")
-$TitleColor.Add("Lead Associate","Blue")
-$TitleColor.Add("Manager","Blue")
-$TitleColor.Add("President","Blue")
-$TitleColor.Add("Security Officer","Blue")
-$TitleColor.Add("Senior Associate","Blue")
-$TitleColor.Add("Senior Consultant","Blue")
+$TitleColor.Add("President","darkviolet")
+
+$TitleColor.Add("Vice President","indigo")
+
 $TitleColor.Add("Senior Director","Blue")
-$TitleColor.Add("Senior Manager","Blue")
-$TitleColor.Add("Senior Specialist","Blue")
-$TitleColor.Add("Specialist","Blue")
-$TitleColor.Add("Vice President","Blue")
-$TitleColor.Add("Intern","Blue")
 $TitleColor.Add("Technical Director","Blue")
 
+$TitleColor.Add("Director","Green")
+$TitleColor.Add("Senior Specialist","Green")
+
+$TitleColor.Add("Senior Manager","greenyellow")
+$TitleColor.Add("Specialist","greenyellow")
+
+$TitleColor.Add("Manager","Yellow")
+
+
+$TitleColor.Add("Senior Associate","orange")
+$TitleColor.Add("Senior Consultant","Orange")
+
+
+$TitleColor.Add("Associate","Red")
+$TitleColor.Add("Lead Associate","Red")
+
+
+$TitleColor.Add("1099","Grey")
+$TitleColor.Add("Intern","Grey")
 
 
 #$graphvizPath = "C:\Program Files\Graphviz\bin\dot.exe"
 
 
-
-
+#install module if needed
+Install-Module AzureAD 
 #connect to azure AD (will prompt you sometimes it hides the window behind other things)
 Connect-AzureAD
 
@@ -60,7 +68,7 @@ $sb.AppendLine("    ranksep=1.9;")
 
 if($includeTitle){
     foreach ($user in $users) {
-        $sb
+        $sb.AppendLine($user.DisplayName.replace(" ","_")+" [color="+$TitleColor[$user.JobTitle]+"]")
     }
 }
 
