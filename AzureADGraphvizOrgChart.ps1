@@ -1,6 +1,5 @@
-
 #set path of saved .dot file
-$path = "C:\Users\rbarbrow\OneDrive - Markon Solutions\Desktop"
+$path = "C:\z\"
 $dotfile ="\orgchart.dot"
 $orgfile = "\orgchart.svg"
 
@@ -9,7 +8,7 @@ $ORGpath =$path+$orgfile
 
 
 #array of names to ignore
-$ignore = @("Blue Desk", "Bot", "Canary Bot", "Help", "Help Con", "Help Fin", "Help HR", "Help IT", "Help Marketing", "Help Office Admin", "Help Rec", "Help Sec", "Help Solutions", "HelpProp", "HQ Innovation Lab", "HQ Training Room", "HQ Well Room", "innovation.lab", "Peerless Admin", "Red Desk", "Yellow Desk")
+$ignore = @("Blue Desk", "Bot", "Canary Bot", "Help", "Help Con", "Help Fin", "Help HR", "Help IT", "Help Marketing", "Help Office Admin", "Help Rec", "Help Sec", "Help Solutions", "HelpProp", "HQ Innovation Lab", "HQ Training Room", "HQ Well Room", "innovation.lab", "Peerless Admin", "Red Desk", "Yellow Desk","markon.training")
 
 $ignoreOrphans = $FALSE
 #$ignoreOrphans = $TRUE
@@ -18,8 +17,8 @@ $ignoreOrphans = $FALSE
 #array of job title to color change as needed
 $includeTitle = $true
 $TitleColor = @{}
-$TitleColor.Add("President","darkviolet") 
-$TitleColor.Add("Vice President","indigo")
+$TitleColor.Add("President","lightpurple") 
+$TitleColor.Add("Vice President","purple")
 $TitleColor.Add("Senior Director","Blue")
 $TitleColor.Add("Director","Green")
 $TitleColor.Add("Technical Director","Green")
@@ -27,19 +26,19 @@ $TitleColor.Add("Senior Manager","greenyellow")
 $TitleColor.Add("Senior Specialist","Greenyellow")
 $TitleColor.Add("Manager","Yellow")
 $TitleColor.Add("Specialist","Yellow")
-$TitleColor.Add("Senior Associate","orange")
+$TitleColor.Add("Senior Associate","Orange")
 $TitleColor.Add("Senior Consultant","Orange")
 $TitleColor.Add("Associate","Red")
 $TitleColor.Add("Lead Associate","Red")
 $TitleColor.Add("1099","Grey")
-$TitleColor.Add("Intern","Grey")
+$TitleColor.Add("Intern","Grey1")
 
 
 #$graphvizPath = "C:\Program Files\Graphviz\bin\dot.exe"
 
 
 #install module if needed
-Install-Module AzureAD 
+#Install-Module AzureAD 
 #connect to azure AD (will prompt you sometimes it hides the window behind other things)
 Connect-AzureAD
 
@@ -58,7 +57,7 @@ $sb.AppendLine("    ranksep=10;")
 #loop sets up def of each user and what colors should be assigined to their node
 if($includeTitle){
     foreach ($user in $users) {
-        $sb.AppendLine($user.DisplayName.replace(" ","_")+" [color="+$TitleColor[$user.JobTitle]+", style=filled]")
+        $sb.AppendLine($user.DisplayName.replace('\W',"_")+" [color="+$TitleColor[$user.JobTitle]+", style=filled]")
     }
 }
 
@@ -75,10 +74,10 @@ foreach ($user in $users) {
         if($null -eq $manager.DisplayName) 
         {
             if(!$ignoreOrphans){
-                $sb.AppendLine(  "None -> " + $user.DisplayName.replace(" ","_") )
+                $sb.AppendLine(  "None -> " + $user.DisplayName.replace('\W',"_") ) 
             }
         }else {
-            $sb.AppendLine( $manager.DisplayName.replace(" ","_")+ " -> "+ $user.DisplayName.replace(" ","_") )
+            $sb.AppendLine( $manager.DisplayName.replace('\W',"_")+ " -> "+ $user.DisplayName.replace('\W',"_") )
         }
     }
 }
@@ -86,13 +85,13 @@ foreach ($user in $users) {
 $sb.AppendLine("}")
 
 #Cleanup  no space, no ., no ',
-$sb = $sb.Replace(".","")
-$sb = $sb.Replace("'","")
-
+#$sb = $sb.Replace(".","")
+#$sb = $sb.Replace("'","")  
+#$sb = $sb.Replace("r-H","r_H")
 $sb.ToString() | Out-File $DOTpath
 
 
 #will add code to run graphviz dot.exe natively here
 #dot -Tpng input.dot > output.png
 #dot -Tps filename.dot -o outfile.ps
-cmd.exe /c C:\Program Files\Graphviz\bin\dot.exe -Tsvg $DOTpath -o $ORGpath
+#cmd.exe /c C:\Program Files\Graphviz\bin\dot.exe -Tsvg $DOTpath -o $ORGpath
