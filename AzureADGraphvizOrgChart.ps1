@@ -1,10 +1,10 @@
 #set path of saved .dot file
 $path = "C:\z\"
 $dotfile ="\orgchart.dot"
-$orgfile = "\orgchart.svg"
+#$orgfile = "\orgchart.svg"
 
 $DOTpath =$path+$dotfile
-$ORGpath =$path+$orgfile
+#$ORGpath =$path+$orgfile
 
 
 #array of names to ignore
@@ -57,7 +57,7 @@ $sb.AppendLine("    ranksep=10;")
 #loop sets up def of each user and what colors should be assigined to their node
 if($includeTitle){
     foreach ($user in $users) {
-        $sb.AppendLine($user.DisplayName.replace('\W',"_")+" [color="+$TitleColor[$user.JobTitle]+", style=filled]")
+        $sb.AppendLine($user.DisplayName.replace("[.- ']",'_')+" [color="+$TitleColor[$user.JobTitle]+", style=filled]")
     }
 }
 
@@ -74,10 +74,10 @@ foreach ($user in $users) {
         if($null -eq $manager.DisplayName) 
         {
             if(!$ignoreOrphans){
-                $sb.AppendLine(  "None -> " + $user.DisplayName.replace('\W',"_") ) 
+                $sb.AppendLine(  "None -> " + $user.DisplayName.replace("[.- ']","_") ) 
             }
         }else {
-            $sb.AppendLine( $manager.DisplayName.replace('\W',"_")+ " -> "+ $user.DisplayName.replace('\W',"_") )
+            $sb.AppendLine($manager.DisplayName) + " -> "+ $user.DisplayName.replace("[.- ']","_") )
         }
     }
 }
@@ -89,6 +89,9 @@ $sb.AppendLine("}")
 #$sb = $sb.Replace("'","")  
 #$sb = $sb.Replace("r-H","r_H")
 $sb.ToString() | Out-File $DOTpath
+
+
+
 
 
 #will add code to run graphviz dot.exe natively here
