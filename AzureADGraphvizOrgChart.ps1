@@ -34,6 +34,16 @@ $TitleColor.Add("1099","Grey")
 $TitleColor.Add("Intern","Grey1")
 
 
+function CleanText([string]$text)
+{
+    $text = $text.Replace(" ","_")
+    $text = $text.Replace(".","")
+    $text = $text.Replace("'","")
+    $text = $text.Replace("-","_")    
+    Write-Debug $text
+    return $text
+}
+
 #$graphvizPath = "C:\Program Files\Graphviz\bin\dot.exe"
 
 
@@ -57,7 +67,8 @@ $sb.AppendLine("    ranksep=10;")
 #loop sets up def of each user and what colors should be assigined to their node
 if($includeTitle){
     foreach ($user in $users) {
-        $sb.AppendLine($user.DisplayName.replace("[.- ']",'_')+" [color="+$TitleColor[$user.JobTitle]+", style=filled]")
+        $u = CleanText ($user.DisplayName)
+        $sb.AppendLine($u+" [color="+$TitleColor[$user.JobTitle]+", style=filled]")
     }
 }
 
@@ -69,19 +80,23 @@ foreach ($user in $users) {
         
         #gets the manager for each user
         $manager = Get-AzureADUserManager -ObjectId $user.ObjectId
-    
+        $u =CleanText($user.DisplayName)
+        $m = CleanText($manager.DisplayName)
         #checks if the manager is null also replaces any spaces in the name
         if($null -eq $manager.DisplayName) 
         {
             if(!$ignoreOrphans){
-                $sb.AppendLine(  "None -> " + $user.DisplayName.replace("[.- ']","_") ) 
+                $sb.AppendLine(  "None -> " + $u ) 
             }
         }else {
-            $sb.AppendLine($manager.DisplayName) + " -> "+ $user.DisplayName.replace("[.- ']","_") )
+            
+            $sb.AppendLine($m + " -> "+ $u )
+            
         }
     }
 }
-    
+ 
+#terminal bracket for graphviz "script"
 $sb.AppendLine("}")
 
 #Cleanup  no space, no ., no ',
@@ -89,7 +104,6 @@ $sb.AppendLine("}")
 #$sb = $sb.Replace("'","")  
 #$sb = $sb.Replace("r-H","r_H")
 $sb.ToString() | Out-File $DOTpath
-
 
 
 
