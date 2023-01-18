@@ -1,16 +1,24 @@
 # Import Module
 Import-Module PSGraph
 
+# Set the path to the Graphviz executable
+$graphvizPath = "C:\Program Files\Graphviz\bin\"
 
+
+
+# Set the path to the output image file
+$outputFile = "C:\z\output.png"
 
 #set path of saved .dot file
-$path = "C:\z\"
+$path = "C:\z"
 $dotfile ="\orgchart.dot"
 #$orgfile = "\orgchart.svg"
 
+
+
 $DOTpath =$path+$dotfile
 #$ORGpath =$path+$orgfile
-
+$inputFile = $DOTpath
 
 #array of names to ignore
 $ignore = @("Blue Desk", "Bot", "Canary Bot", "Help", "Help Con", "Help Fin", "Help HR", "Help IT", "Help Marketing", "Help Office Admin", "Help Rec", "Help Sec", "Help Solutions", "HelpProp", "HQ Innovation Lab", "HQ Training Room", "HQ Well Room", "innovation.lab", "Peerless Admin", "Red Desk", "Yellow Desk","markon.training")
@@ -20,23 +28,7 @@ $ignoreOrphans = $FALSE
 
 
 #array of job title to color change as needed
-$includeTitle = $true
-$TitleColor = @{}
-$TitleColor.Add("President","lightpurple") 
-$TitleColor.Add("Vice President","purple")
-$TitleColor.Add("Senior Director","Blue")
-$TitleColor.Add("Director","Green")
-$TitleColor.Add("Technical Director","Green")
-$TitleColor.Add("Senior Manager","greenyellow")
-$TitleColor.Add("Senior Specialist","Greenyellow")
-$TitleColor.Add("Manager","Yellow")
-$TitleColor.Add("Specialist","Yellow")
-$TitleColor.Add("Senior Associate","Orange")
-$TitleColor.Add("Senior Consultant","Orange")
-$TitleColor.Add("Associate","Red")
-$TitleColor.Add("Lead Associate","Red")
-$TitleColor.Add("1099","Grey")
-$TitleColor.Add("Intern","Grey1")
+
 
 
 function CleanText([string]$text)
@@ -44,7 +36,11 @@ function CleanText([string]$text)
     $text = $text.Replace(" ","_")
     $text = $text.Replace(".","")
     $text = $text.Replace("'","")
-    $text = $text.Replace("-","_")    
+    $text = $text.Replace("-","_")   
+    $text = $text.Replace("@","_")
+    $text = $text.Replace("(","_")  
+    $text = $text.Replace(")","_")
+    $text = $text.Replace("&","_")     
     Write-Debug $text
     return $text
 }
@@ -58,7 +54,8 @@ function CleanText([string]$text)
 Connect-AzureAD
 
 #grab a list of all memebers
-$users = Get-AzureADUser -All $true | where-object {$_.UserType -eq 'Member'}
+#$users = Get-AzureADUser -All $true | where-object {$_.UserType -eq 'Member'}
+$users = Get-AzureADUser -All $true | Where-Object {$_.UserType -eq "Member" -and $_.DisplayName -notlike "*Shared*"}
 
 #create a stringbuilder object
 $sb = new-object System.Text.StringBuilder
@@ -70,12 +67,7 @@ $sb.AppendLine("    ranksep=10;")
 
 #loop through each user 
 #loop sets up def of each user and what colors should be assigined to their node
-if($includeTitle){
-    foreach ($user in $users) {
-        $u = CleanText ($user.DisplayName)
-        $sb.AppendLine($u+" [color="+$TitleColor[$user.JobTitle]+", style=filled]")
-    }
-}
+
 
 #loop sets up the hierarchy 
 foreach ($user in $users) {
@@ -96,7 +88,7 @@ foreach ($user in $users) {
         }else {
             
             $sb.AppendLine($m + " -> "+ $u )
-            write-out $m
+            Write-Output $m
         }
     }
 }
@@ -108,12 +100,16 @@ $sb.AppendLine("}")
 #$sb = $sb.Replace(".","")
 #$sb = $sb.Replace("'","")  
 #$sb = $sb.Replace("r-H","r_H")
-$sb.ToString() | Out-File $DOTpath
+$sb.ToString() | Out-File $DOTpath -Encoding ascii
 
-$sb.ToString() | Export-PSGraph -ShowGraph 
 
+
+# Run the dot command to create the image file
+& "$graphvizPath\dot.exe" -Tsvg $inputFile -o $outputFile
 
 #will add code to run graphviz dot.exe natively here
 #dot -Tpng input.dot > output.png
 #dot -Tps filename.dot -o outfile.ps
 #cmd.exe /c C:\Program Files\Graphviz\bin\dot.exe -Tsvg $DOTpath -o $ORGpath
+
+Disconnect-AzureAD 
