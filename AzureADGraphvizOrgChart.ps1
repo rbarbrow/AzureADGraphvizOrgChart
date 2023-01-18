@@ -1,3 +1,8 @@
+# Import Module
+Import-Module PSGraph
+
+
+
 #set path of saved .dot file
 $path = "C:\z\"
 $dotfile ="\orgchart.dot"
@@ -91,7 +96,7 @@ foreach ($user in $users) {
         }else {
             
             $sb.AppendLine($m + " -> "+ $u )
-            
+            write-out $m
         }
     }
 }
@@ -105,7 +110,7 @@ $sb.AppendLine("}")
 #$sb = $sb.Replace("r-H","r_H")
 $sb.ToString() | Out-File $DOTpath
 
-
+$sb.ToString() | Export-PSGraph -ShowGraph 
 
 
 #will add code to run graphviz dot.exe natively here
