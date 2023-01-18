@@ -14,3 +14,8 @@ PS Command: Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser
 PS Command: Install-Module -Name AzureAD
 Windows config: add new enviromental variable to PATH  "C:\Program Files\Graphviz\bin\" (without quotes)
 VS CODE: add extention "Grapviz Preview"
+
+
+edit:
+
+added code to run graphviz via commandline

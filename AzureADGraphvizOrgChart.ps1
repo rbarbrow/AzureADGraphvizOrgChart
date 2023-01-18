@@ -106,6 +106,7 @@ $sb.ToString() | Out-File $DOTpath -Encoding ascii
 
 # Run the dot command to create the image file
 & "$graphvizPath\dot.exe" -Tsvg $inputFile -o $outputFile
+#& "$graphvizPath\dot.exe" -Tpng $inputFile -o $outputFile
 
 #will add code to run graphviz dot.exe natively here
 #dot -Tpng input.dot > output.png
